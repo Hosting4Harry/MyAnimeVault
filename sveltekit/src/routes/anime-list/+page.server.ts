@@ -8,10 +8,10 @@ export const load = async () => {
         const filePath = path.join(process.cwd(), 'static', 'animeList.json');
         const data = await fs.readFile(filePath, 'utf-8');
         const response = JSON.parse(data);
-        return { animes: response.animes };
+        return { animes: response.animes || dummyData };
     } catch (error) {
         console.error('Error reading the anime list:', error);
-        return { props: { animes: [] } }; // Return an empty array or handle the error as needed
+        return { props: { animes: dummyData } }; // Return an empty array or handle the error as needed
     }
 };
 
@@ -32,7 +32,7 @@ const dummyData: Anime[] = [
         episodes: 75,
         episodesWatched: 75,
         genre: ["action", "drama", "fantasy"],
-        completionDate: new Date("2023-12-20"),
+        completionDate: "2023-12-20",
         rating: 9.5,
     },
     {
@@ -42,7 +42,7 @@ const dummyData: Anime[] = [
         episodes: 26,
         episodesWatched: 15,
         genre: ["action", "supernatural"],
-        startDate: new Date("2024-01-01"),
+        startDate: "2024-01-01",
     },
     {
         id: randomId(),
@@ -51,7 +51,7 @@ const dummyData: Anime[] = [
         episodes: 37,
         episodesWatched: 37,
         genre: ["thriller", "supernatural", "psychological"],
-        completionDate: new Date("2023-11-15"),
+        completionDate: "2023-11-15",
         rating: 9.0,
     },
     {
@@ -61,7 +61,7 @@ const dummyData: Anime[] = [
         episodes: 1100,
         episodesWatched: 850,
         genre: ["adventure", "action", "comedy"],
-        startDate: new Date("2023-06-01"),
+        startDate: "2023-06-01",
     },
     {
         id: randomId(),
