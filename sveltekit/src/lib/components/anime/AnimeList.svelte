@@ -135,6 +135,10 @@
                 <tr>
                     <th
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >Actions</th
+                    >
+                    <th
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >Title</th
                     >
                     <th
@@ -157,22 +161,34 @@
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >Completed</th
                     >
-                    <th
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >Actions</th
-                    >
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 {#if animeList.length === 0}
                     <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap"> 
+                        <td class="px-6 py-4 whitespace-nowrap">
                             No records found
                         </td>
                     </tr>
                 {/if}
                 {#each animeList as anime (anime.id)}
                     <tr class="hover:bg-gray-50">
+                        <td
+                            class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                        >
+                            <button
+                                class="text-indigo-600 hover:text-indigo-900 mr-4"
+                                onclick={() => openEditModal(anime)}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                class="text-red-600 hover:text-red-900"
+                                onclick={() => deleteAnime(anime.id)}
+                            >
+                                Delete
+                            </button>
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div
                                 class="flex flex-col font-medium text-gray-900"
@@ -232,22 +248,6 @@
                             class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                         >
                             {formatDate(anime.completionDate)}
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-nowrap text-sm font-medium"
-                        >
-                            <button
-                                class="text-indigo-600 hover:text-indigo-900 mr-4"
-                                onclick={() => openEditModal(anime)}
-                            >
-                                Edit
-                            </button>
-                            <button
-                                class="text-red-600 hover:text-red-900"
-                                onclick={() => deleteAnime(anime.id)}
-                            >
-                                Delete
-                            </button>
                         </td>
                     </tr>
                 {/each}

@@ -43,10 +43,27 @@ export const POST: RequestHandler = async ({ request }) => {
     try {
         let sql = "";
         let values: any[] = [];
+        const today = new Date().toISOString().split('T')[0];
+
         const formatDate = (date: string | null) => date ? new Date(date).toISOString().split('T')[0] : null;
 
-        if (data.id === 0) {
+        // Auto-set dates based on status
+        let startDate = formatDate(data.startDate);
+        let completionDate = formatDate(data.completionDate);
 
+        if (data.status === "completed" && !completionDate) {
+            completionDate = today;
+        }
+        if (data.status !== "completed" && completionDate) {
+            completionDate = null
+        }
+
+        if (data.status === "watching" && !startDate) {
+            startDate = today;
+        }
+
+        if (data.id === 0) {
+            // Check if the anime already exists
             const checkTitleSQL = `SELECT COUNT(*) as count FROM Animes WHERE title = ?`;
             const checkResult: any = await executeQuery(checkTitleSQL, [data.title]);
 
@@ -61,13 +78,12 @@ export const POST: RequestHandler = async ({ request }) => {
                 data.status,
                 data.episodes,
                 data.episodesWatched,
-                formatDate(data.startDate),
-                formatDate(data.completionDate),
+                startDate,
+                completionDate,
                 data.rating || 0,
                 data.genreIds,
             ];
         } else {
-
             sql = `UPDATE Animes 
                    SET title = ?, status = ?, episodes = ?, episodesWatched = ?, startDate = ?, completionDate = ?, rating = ?, genreIds = ?
                    WHERE id = ?`;
@@ -76,8 +92,8 @@ export const POST: RequestHandler = async ({ request }) => {
                 data.status,
                 data.episodes,
                 data.episodesWatched,
-                formatDate(data.startDate),
-                formatDate(data.completionDate),
+                startDate,
+                completionDate,
                 data.rating,
                 data.genreIds,
                 data.id,
@@ -92,6 +108,7 @@ export const POST: RequestHandler = async ({ request }) => {
         return json({ success: false, message: "Something went wrong." });
     }
 };
+
 
 export const DELETE: RequestHandler = async ({ url }) => {
     const id = url.searchParams.get("id");

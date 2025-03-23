@@ -20,7 +20,7 @@
   } = $props();
 
   const checkboxClass = clsx(
-    "appearance-none align-middle rounded-sm bg-center bg-cover border-2  min-w-16px w-4 h-4",
+    "appearance-none flex-shrink-0 align-middle rounded-sm bg-center bg-cover border-2  min-w-16px w-4 h-4",
     {
       "border-[#000000] cursor-pointer": !disabled,
 
