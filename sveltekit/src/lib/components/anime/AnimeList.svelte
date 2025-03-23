@@ -147,7 +147,7 @@
                         >Actions</th
                     >
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[300px]"
                         >Title</th
                     >
                     <th
@@ -200,7 +200,7 @@
                                 </button>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="px-6 py-4 whitespace-nowrap min-w-[300px]">
                             <div
                                 class="flex flex-col font-medium text-gray-900"
                             >
