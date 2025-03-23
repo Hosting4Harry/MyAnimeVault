@@ -185,18 +185,20 @@
                         <td
                             class="px-6 py-4 whitespace-nowrap text-sm font-medium"
                         >
-                            <button
-                                class="text-indigo-600 hover:text-indigo-900 mr-4"
-                                onclick={() => openEditModal(anime)}
-                            >
-                                Edit
-                            </button>
-                            <button
-                                class="text-red-600 hover:text-red-900"
-                                onclick={() => deleteAnime(anime.id)}
-                            >
-                                Delete
-                            </button>
+                            <div class="flex flex-col gap-2">
+                                <button
+                                    class="text-indigo-600 hover:text-indigo-900 mr-4"
+                                    onclick={() => openEditModal(anime)}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    class="text-red-600 hover:text-red-900"
+                                    onclick={() => deleteAnime(anime.id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div
