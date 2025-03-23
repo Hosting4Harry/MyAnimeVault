@@ -14,7 +14,7 @@
   <p
     class="text-sm {type === 'Success'
       ? 'text-[#09814A]'
-      : 'text-red'} pt-2 {errorClass}"
+      : 'text-red-500'} {errorClass}"
   >
     {message}
   </p>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { page } from "$app/state";
     import type {
         Anime,
         AnimeStatus,
@@ -8,24 +9,15 @@
     import DynamicSelect from "../building-blocks/DynamicSelect.svelte";
     import InputField from "../building-blocks/InputField.svelte";
 
-    let {
-        filter = $bindable(),
-    }: { filter: FilterProps } = $props();
+    let { filter = $bindable() }: { filter: FilterProps } = $props();
 
-    let uniqueGenres = [
-        { label: "All Genres", value: "all" },
-        { label: "Action", value: "action" },
-        { label: "Adventure", value: "adventure" },
-        { label: "Comedy", value: "comedy" },
-        { label: "Drama", value: "drama" },
-        { label: "Fantasy", value: "fantasy" },
-        { label: "Psychological", value: "psychological" },
-        { label: "Slice of Life", value: "slice_of_life" },
-        { label: "Supernatural", value: "supernatural" },
-        { label: "Thriller", value: "thriller" },
-    ];
+    let uniqueGenres = $derived.by(() => {
+        return [{ label: "All Genres", value: "" }, ...page.data.genres];
+    });
 
-    let selectedStatus = $state<Option[]>([]);
+    let selectedStatus = $state<Option[]>([
+        { label: "All Status", value: "all" },
+    ]);
     let selectedGenre = $state<Option[]>([]);
     const statusOptions = [
         { label: "All Status", value: "all" },
@@ -36,14 +28,12 @@
     ];
     $effect(() => {
         selectedGenre = uniqueGenres.filter((item) => {
-            return filter.genre
-                .toLowerCase()
-                .includes(item.value.toLowerCase());
+            return filter.genre.split(",").includes(String(item.value));
         });
         selectedStatus = statusOptions.filter((item) => {
             return filter.status
-                .toLowerCase()
-                .includes(item.value.toLowerCase());
+                .split(",")
+                .includes(String(item.value));
         });
     });
 </script>

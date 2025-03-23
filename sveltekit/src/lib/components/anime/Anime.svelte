@@ -1,36 +1,46 @@
 <script lang="ts">
-    import { page } from "$app/state";
     import type {
         Anime,
         AnimeStatus,
         FilterProps,
     } from "$lib/types/anime.types";
     import AddAnimeModal from "./AddAnimeModal.svelte";
-    import AnimeSection from "./AnimeSection.svelte";
+    import AnimeList from "./AnimeList.svelte";
     import FilterSection from "./FilterSection.svelte";
 
-    let animeList = $state<Anime[]>(page.data.animes);
     let isDialogOpen = $state(false);
-    let selectedAnime = $state<Anime | undefined>(undefined);
+    let selectedAnime = $state<Anime | null>(null);
 
     let filter = $state<FilterProps>({
         status: "all" as AnimeStatus,
         searchQuery: "",
-        genre: "all",
+        genre: "",
     });
 
     // Reactive value for filtered anime list
-    const filteredAnime = $derived.by(() => {
-        return [...animeList].filter((anime) => {
-            const matchesStatus =
-                filter.status === "all" || anime.status === filter.status;
-            const matchesSearch = anime.title
-                .toLowerCase()
-                .includes(filter.searchQuery.toLowerCase());
-            const matchesGenre =
-                filter.genre === "all" || anime.genre.includes(filter.genre);
-            return matchesStatus && matchesSearch && matchesGenre;
-        });
+    let filteredAnime = $state([] as Anime[]);
+
+    const fetchData = async () => {
+        try {
+            const queryParams = new URLSearchParams();
+
+            if (filter.searchQuery)
+                queryParams.append("name", filter.searchQuery);
+            if (filter.status) queryParams.append("status", filter.status);
+            if (filter.genre?.length)
+                queryParams.append("genreIds", filter?.genre);
+
+            const res = await fetch(
+                `/api/anime-list?${queryParams.toString()}`,
+            );
+            const data = await res.json();
+            filteredAnime = data; // Update store value
+        } catch (error) {
+            console.error("Error fetching filtered anime:", error);
+        }
+    };
+    $effect(() => {
+        fetchData();
     });
 </script>
 
@@ -38,20 +48,17 @@
     <!-- Sidebar Filters -->
     <FilterSection bind:filter />
     <!-- Main Content -->
-    <AnimeSection
-        bind:animeList
-        {filteredAnime}
-        bind:selectedAnime
-        bind:isDialogOpen
-    />
-
+    <AnimeList {filteredAnime} bind:selectedAnime bind:isDialogOpen />
     <!-- Add Button -->
     <button
-        onclick={() => (isDialogOpen = true)}
-        class="fixed bottom-8 right-8 bg-blue-600 hover:bg-blue-700 text-white h-14 w-14 rounded-full shadow-lg flex items-center justify-center transition-colors"
+        onclick={() => {
+            selectedAnime = null;
+            isDialogOpen = true;
+        }}
+        class="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white h-14 w-14 rounded-full shadow-lg flex md:hidden items-center justify-center transition-colors"
     >
         +
     </button>
 </div>
 <!-- Add Anime Dialog -->
-<AddAnimeModal bind:animeList bind:isDialogOpen anime={selectedAnime} />
+<AddAnimeModal bind:isDialogOpen {selectedAnime} />

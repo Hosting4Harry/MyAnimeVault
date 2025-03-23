@@ -6,16 +6,15 @@ export type AnimeStatus =
     | "dropped";
 
 export interface Anime {
-    id: string;
+    id: number;
     title: string;
     status: AnimeStatus;
     rating?: number;
     episodes: number;
     episodesWatched: number;
-    genre: string[];
+    genreIds: string;
     startDate?: string;
     completionDate?: string;
-    notes?: string;
 }
 
 export interface FilterProps {

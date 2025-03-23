@@ -29,3 +29,24 @@ export const formatPhoneNumberAsYouType = (input: string, type = "(000) 000-0000
 export function randomId(): string {
     return (Math.random() + new Date().getTime()).toString();
 }
+
+export function numericFormatter(input: string | number, pattern: string): string {
+    if (!input) return "";
+
+    const inputStr = input.toString().replace(/\D/g, ""); // Remove non-numeric characters
+    let formatted = "";
+    let inputIndex = 0;
+
+    for (const char of pattern) {
+        if (inputIndex >= inputStr.length) break; // Stop processing when input runs out
+
+        if (char === "#") {
+            formatted += inputStr[inputIndex]; // Fill with number
+            inputIndex++;
+        } else {
+            formatted += char; // Keep formatting characters
+        }
+    }
+
+    return formatted;
+}
