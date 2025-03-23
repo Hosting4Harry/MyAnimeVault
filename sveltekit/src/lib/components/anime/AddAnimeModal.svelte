@@ -2,16 +2,20 @@
     import { invalidateAll } from "$app/navigation";
     import { page } from "$app/state";
     import { validateForm } from "$lib";
+    import { addToast } from "$lib/store/toast-store";
     import type { Anime, AnimeStatus } from "$lib/types/anime.types";
     import type { Option } from "$lib/types/data.types";
     import DynamicSelect from "../building-blocks/DynamicSelect.svelte";
     import InputField from "../building-blocks/InputField.svelte";
+    import StarRating from "../building-blocks/StarRating.svelte";
 
     let {
         isDialogOpen = $bindable(),
+        revalidate = $bindable(),
         selectedAnime,
     }: {
         isDialogOpen: boolean;
+        revalidate: boolean;
         selectedAnime: Anime | null;
     } = $props();
 
@@ -41,7 +45,7 @@
     async function addAnime(e: Event): Promise<void> {
         e.preventDefault();
         if (!validateForm(formElement as HTMLFormElement)) return;
-        isDialogOpen = false;
+
         try {
             const response = await fetch("/api/anime-list", {
                 method: "POST",
@@ -52,8 +56,19 @@
             });
             const res = await response.json();
             if (res?.success) {
+                addToast({
+                    type: "success",
+                    message: `Anime ${isEditing ? "updated" : "added"} successfully`,
+                });
                 await invalidateAll();
                 resetForm();
+                isDialogOpen = false;
+                revalidate = !revalidate;
+            } else {
+                addToast({
+                    type: "error",
+                    message: res?.message || "Something went wrong",
+                });
             }
         } catch (error) {
             console.log(error);
@@ -132,8 +147,10 @@
                         class="w-full !p-2.5 border rounded"
                         required
                         label="Title"
+                        maxlength={200}
                     />
                 </div>
+
                 <div>
                     <label
                         for="user-name"
@@ -202,6 +219,14 @@
                         class="w-full !p-2.5 border rounded"
                     />
                 </div>
+                <div class="col-span-2 flex items-center justify-start gap-2">
+                    <label
+                        for="ratings"
+                        class="block text-sm mb-1 font-medium text-gray-700"
+                        >Ratings:</label
+                    >
+                    <StarRating bind:rating={anime.rating} />
+                </div>
             </div>
             <div class="flex gap-2 mt-4">
                 <button
@@ -215,7 +240,7 @@
                         isDialogOpen = false;
                         resetForm();
                     }}
-                    class="flex-1 border border-neutral-800 hover:border-neutral-950  bg-white  text-neutral-950 px-4 py-2 rounded"
+                    class="flex-1 border border-neutral-800 hover:border-neutral-950 bg-white text-neutral-950 px-4 py-2 rounded"
                 >
                     Cancel
                 </button>

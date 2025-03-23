@@ -1,13 +1,16 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import { addToast } from "$lib/store/toast-store";
     import type { Anime, AnimeStatus } from "$lib/types/anime.types";
     import type { Option } from "$lib/types/data.types";
     let {
         isDialogOpen = $bindable(),
         selectedAnime = $bindable(),
+        revalidate = $bindable(),
         filteredAnime,
     }: {
         isDialogOpen: boolean;
+        revalidate: boolean;
         selectedAnime: Anime | null;
         filteredAnime: Anime[];
     } = $props();
@@ -21,9 +24,24 @@
     }
 
     // Function to delete anime
-    function deleteAnime(id: number) {
+    async function deleteAnime(id: number) {
         if (confirm("Are you sure you want to delete this anime?")) {
-            animeList = animeList.filter((anime) => anime.id !== id);
+            const res = await fetch(`/api/anime-list?id=${id}`, {
+                method: "DELETE",
+            });
+            const response = await res.json();
+            if (response.success) {
+                addToast({
+                    type: "success",
+                    message: "Deleted successfully",
+                });
+                revalidate = !revalidate;
+            } else {
+                addToast({
+                    type: "error",
+                    message: (res as any)?.message || "Something went wrong",
+                });
+            }
         }
     }
 
@@ -146,16 +164,25 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
+                {#if animeList.length === 0}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap"> 
+                            No records found
+                        </td>
+                    </tr>
+                {/if}
                 {#each animeList as anime (anime.id)}
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div
                                 class="flex flex-col font-medium text-gray-900"
                             >
-                                <span>{anime.title}</span>
+                                <span class="whitespace-normal"
+                                    >{anime.title}</span
+                                >
                                 <span>
                                     Rating: {anime.rating
-                                        ? `${anime.rating}/10`
+                                        ? `${anime.rating}/5.0`
                                         : "Not rated"}
                                 </span>
                             </div>
