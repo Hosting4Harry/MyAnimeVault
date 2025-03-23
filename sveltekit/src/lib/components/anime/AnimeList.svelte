@@ -1,16 +1,23 @@
 <script lang="ts">
     import { page } from "$app/state";
     import { addToast } from "$lib/store/toast-store";
-    import type { Anime, AnimeStatus } from "$lib/types/anime.types";
+    import type {
+        Anime,
+        AnimeStatus,
+        FilterProps,
+    } from "$lib/types/anime.types";
     import type { Option } from "$lib/types/data.types";
+    import FilterSection from "./FilterSection.svelte";
     let {
         isDialogOpen = $bindable(),
         selectedAnime = $bindable(),
         revalidate = $bindable(),
+        filter = $bindable(),
         filteredAnime,
     }: {
         isDialogOpen: boolean;
         revalidate: boolean;
+        filter: FilterProps;
         selectedAnime: Anime | null;
         filteredAnime: Anime[];
     } = $props();
@@ -103,29 +110,31 @@
 
     $effect(() => {
         animeList = filteredAnime;
-        debugger;
     });
 </script>
 
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
+<div class="w-full mx-auto px-4 py-8">
+    <div class="flex flex-wrap justify-between items-center mb-6 gap-2">
         <h1 class="text-2xl font-bold text-gray-800">My Anime List</h1>
-        <button
-            class="md:flex hidden px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
-            onclick={() => {
-                selectedAnime = {
-                    id: 0,
-                    title: "",
-                    status: "plan_to_watch",
-                    episodes: 0,
-                    episodesWatched: 0,
-                    genreIds: "",
-                };
-                isDialogOpen = true;
-            }}
-        >
-            Add New Anime
-        </button>
+        <div class="flex items-center gap-2">
+            <FilterSection bind:filter />
+            <button
+                class="md:flex hidden px-4 py-2.5 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition min-w-[150px]"
+                onclick={() => {
+                    selectedAnime = {
+                        id: 0,
+                        title: "",
+                        status: "plan_to_watch",
+                        episodes: 0,
+                        episodesWatched: 0,
+                        genreIds: "",
+                    };
+                    isDialogOpen = true;
+                }}
+            >
+                Add New Anime
+            </button>
+        </div>
     </div>
 
     <!-- Anime List Table -->

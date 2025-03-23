@@ -31,38 +31,38 @@
             return filter.genre.split(",").includes(String(item.value));
         });
         selectedStatus = statusOptions.filter((item) => {
-            return filter.status
-                .split(",")
-                .includes(String(item.value));
+            return filter.status.split(",").includes(String(item.value));
         });
     });
 </script>
 
 <div
-    class="flex flex-col gap-2 p-6 text-base font-medium text-gray-900 bg-white rounded-md border-b border-solid border-[#E5E7EB] md:max-w-[249px] min-w-[249px] max-h-fit"
+    class="flex flex-wrap gap-2 text-base font-medium text-gray-900 rounded-md w-full max-h-fit"
 >
-    <div class="text-xl font-bold mb-4">Filters</div>
-    <InputField
-        bind:value={filter.searchQuery}
-        placeholder="Search anime..."
-        class="border-naro-300"
-    />
+        <InputField
+            bind:value={filter.searchQuery}
+            placeholder="Search anime..."
+            class="border-naro-300 !py-2.5 !min-w-[270px]"
+        />
 
-    <DynamicSelect
-        id="anime-status"
-        mode="single"
-        options={statusOptions}
-        bind:selectedValues={selectedStatus}
-        placeholder="Select a status"
-        onChange={(option) => (filter.status = option[0].value as AnimeStatus)}
-    />
+        <DynamicSelect
+            id="anime-status"
+            mode="single"
+            options={statusOptions}
+            bind:selectedValues={selectedStatus}
+            customClass="!min-w-[270px]"
+            placeholder="Select a status"
+            onChange={(option) =>
+                (filter.status = option[0].value as AnimeStatus)}
+        />
 
-    <DynamicSelect
-        id="anime-genre"
-        mode="single"
-        options={uniqueGenres}
-        bind:selectedValues={selectedGenre}
-        placeholder="Select a genre"
-        onChange={(option) => (filter.genre = option[0].value as string)}
-    />
+        <DynamicSelect
+            id="anime-genre"
+            mode="single"
+            customClass="!min-w-[270px]"
+            options={uniqueGenres}
+            bind:selectedValues={selectedGenre}
+            placeholder="Select a genre"
+            onChange={(option) => (filter.genre = option[0].value as string)}
+        />
 </div>
