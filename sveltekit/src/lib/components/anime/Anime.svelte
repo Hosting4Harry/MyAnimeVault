@@ -6,6 +6,7 @@
     } from "$lib/types/anime.types";
     import AddAnimeModal from "./AddAnimeModal.svelte";
     import AnimeList from "./AnimeList.svelte";
+    import FilterSection from "./FilterSection.svelte";
     let { revalidate = $bindable() }: { revalidate: boolean } = $props();
     let isDialogOpen = $state(false);
     let selectedAnime = $state<Anime | null>(null);
@@ -44,13 +45,23 @@
 </script>
 
 <div class="flex flex-col gap-6">
-    <!-- Sidebar Filters -->
-    
+    <div class="flex flex-wrap justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">My Anime List</h1>
+        <div>
+            <FilterSection bind:filter />
+        </div>
+    </div>
 
     <!-- Main Content -->
-    <AnimeList {filteredAnime} bind:selectedAnime bind:isDialogOpen bind:revalidate bind:filter/>
+    <AnimeList
+        {filteredAnime}
+        bind:selectedAnime
+        bind:isDialogOpen
+        bind:revalidate
+        bind:filter
+    />
     <!-- Add Button -->
-    <button
+    <!-- <button
         onclick={() => {
             selectedAnime = null;
             isDialogOpen = true;
@@ -58,7 +69,7 @@
         class="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white h-14 w-14 rounded-full shadow-lg flex md:hidden items-center justify-center transition-colors"
     >
         +
-    </button>
+    </button> -->
 </div>
 <!-- Add Anime Dialog -->
-<AddAnimeModal bind:isDialogOpen {selectedAnime} bind:revalidate/>
+<AddAnimeModal bind:isDialogOpen {selectedAnime} bind:revalidate />

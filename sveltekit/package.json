@@ -28,6 +28,7 @@
 		"vitest": "^2.1.8"
 	},
 	"dependencies": {
+		"lucide-svelte": "^0.484.0",
 		"mysql2": "^3.14.0"
 	}
 }

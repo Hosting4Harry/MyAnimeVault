@@ -1,0 +1,78 @@
+<script lang="ts">
+    import { Plus, X, List, Grid, FileText } from "lucide-svelte";
+    import type { Anime } from "$lib/types/anime.types";
+
+    let {
+        currentDesign = $bindable(),
+        isDialogOpen = $bindable(),
+        selectedAnime = $bindable(),
+    }: {
+        currentDesign: string;
+        isDialogOpen: boolean;
+        selectedAnime: Anime | null;
+    } = $props();
+
+    let isExpanded = $state(false);
+
+    function toggleDesign(design: string) {
+        currentDesign = design;
+        isExpanded = false; // Close menu after selection
+    }
+
+    function openDialog() {
+        selectedAnime = {
+            id: 0,
+            title: "",
+            status: "plan_to_watch",
+            episodes: 0,
+            episodesWatched: 0,
+            genreIds: "",
+        };
+        isDialogOpen = true;
+    }
+</script>
+
+<!-- Floating Action Button -->
+<div
+    role="none"
+    class="fixed bottom-6 right-6 bg-indigo-600 text-white p-4 rounded-full shadow-lg cursor-pointer transition-transform transform hover:scale-110"
+    onclick={() => (isExpanded = !isExpanded)}
+>
+    {#if isExpanded}
+        <X size="24" />
+    {:else}
+        <Plus size="24" />
+    {/if}
+</div>
+
+<!-- Quick Ball Buttons -->
+<div
+    class="fixed bottom-[90px] right-[29px] flex flex-col items-center gap-2 transition-all"
+>
+    {#if isExpanded}
+        <button
+            class="bg-indigo-600 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            onclick={openDialog}
+        >
+            <Plus />
+        </button>
+        <button
+            class="bg-indigo-600 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            onclick={() => toggleDesign("default")}
+        >
+            <List class="text-current" />
+        </button>
+        <button
+            class="bg-indigo-600 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            onclick={() => toggleDesign("card")}
+        >
+            <Grid class="text-current" />
+        </button>
+        <button
+            class="bg-indigo-600 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            onclick={() => toggleDesign("compact")}
+        >
+            <FileText class="text-current" />
+        </button>
+    {/if}
+</div>

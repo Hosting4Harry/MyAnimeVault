@@ -39,30 +39,29 @@
 <div
     class="flex flex-wrap gap-2 text-base font-medium text-gray-900 rounded-md w-full max-h-fit"
 >
-        <InputField
-            bind:value={filter.searchQuery}
-            placeholder="Search anime..."
-            class="border-naro-300 !py-2.5 !min-w-[270px]"
-        />
+    <InputField
+        bind:value={filter.searchQuery}
+        placeholder="Search anime..."
+        class="border-naro-300 !py-2.5 !min-w-[270px]"
+    />
 
-        <DynamicSelect
-            id="anime-status"
-            mode="single"
-            options={statusOptions}
-            bind:selectedValues={selectedStatus}
-            customClass="!min-w-[270px]"
-            placeholder="Select a status"
-            onChange={(option) =>
-                (filter.status = option[0].value as AnimeStatus)}
-        />
+    <DynamicSelect
+        id="anime-status"
+        mode="single"
+        options={statusOptions}
+        bind:selectedValues={selectedStatus}
+        customClass="!min-w-[270px]"
+        placeholder="Select a status"
+        onChange={(option) => (filter.status = option[0].value as AnimeStatus)}
+    />
 
-        <DynamicSelect
-            id="anime-genre"
-            mode="single"
-            customClass="!min-w-[270px]"
-            options={uniqueGenres}
-            bind:selectedValues={selectedGenre}
-            placeholder="Select a genre"
-            onChange={(option) => (filter.genre = option[0].value as string)}
-        />
+    <DynamicSelect
+        id="anime-genre"
+        mode="single"
+        customClass="!min-w-[270px]"
+        options={uniqueGenres}
+        bind:selectedValues={selectedGenre}
+        placeholder="Select a genre"
+        onChange={(option) => (filter.genre = option[0].value as string)}
+    />
 </div>

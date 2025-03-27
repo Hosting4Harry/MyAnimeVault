@@ -9,5 +9,5 @@
 {@render children()}
 
 <div>
-	<Toasts position="bottom-left" />
+	<Toasts position="top-right" />
 </div>
