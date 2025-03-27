@@ -22,3 +22,10 @@ export interface FilterProps {
     searchQuery: string;
     genre: string;
 }
+
+export type ComponentProps = {
+    name: string;
+    animeList: Anime[];
+    openEditModal: (anime: Anime) => void;
+    deleteAnime: (id: number) => Promise<void>;
+};

@@ -1,6 +1,8 @@
 <script lang="ts">
     import { Plus, X, List, Grid, FileText } from "lucide-svelte";
     import type { Anime } from "$lib/types/anime.types";
+    import { page } from "$app/state";
+    import { goto } from "$app/navigation";
 
     let {
         currentDesign = $bindable(),
@@ -16,6 +18,7 @@
 
     function toggleDesign(design: string) {
         currentDesign = design;
+        goto(page.url.pathname + "?design=" + design);
         isExpanded = false; // Close menu after selection
     }
 
@@ -60,19 +63,31 @@
             class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("default")}
         >
-            <List class="text-current {currentDesign==='default' ? 'text-indigo-500' : 'text-current'}" />
+            <List
+                class="text-current {currentDesign === 'default'
+                    ? 'text-indigo-500'
+                    : 'text-current'}"
+            />
         </button>
         <button
             class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("card")}
         >
-            <Grid class="text-current {currentDesign==='card' ? 'text-indigo-500' : 'text-current'}" />
+            <Grid
+                class="text-current {currentDesign === 'card'
+                    ? 'text-indigo-500'
+                    : 'text-current'}"
+            />
         </button>
         <button
             class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("compact")}
         >
-            <FileText class="text-current {currentDesign==='compact' ? 'text-indigo-500' : 'text-current'}" />
+            <FileText
+                class="text-current {currentDesign === 'compact'
+                    ? 'text-indigo-500'
+                    : 'text-current'}"
+            />
         </button>
     {/if}
 </div>

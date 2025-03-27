@@ -26,10 +26,6 @@ export const formatPhoneNumberAsYouType = (input: string, type = "(000) 000-0000
     return input;
 };
 
-export function randomId(): string {
-    return (Math.random() + new Date().getTime()).toString();
-}
-
 export function numericFormatter(input: string | number, pattern: string): string {
     if (!input) return "";
 
@@ -50,3 +46,12 @@ export function numericFormatter(input: string | number, pattern: string): strin
 
     return formatted;
 }
+
+export const debounce = (callback: Function, wait = 250) => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    return (...args: any[]) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => callback(...args), wait);
+    };
+};

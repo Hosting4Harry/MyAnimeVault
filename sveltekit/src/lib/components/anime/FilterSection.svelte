@@ -6,11 +6,12 @@
         FilterProps,
     } from "$lib/types/anime.types";
     import type { Option } from "$lib/types/data.types";
+    import { debounce } from "$lib/utils";
     import DynamicSelect from "../building-blocks/DynamicSelect.svelte";
     import InputField from "../building-blocks/InputField.svelte";
 
     let { filter = $bindable() }: { filter: FilterProps } = $props();
-
+    let searchValue = $state("");
     let uniqueGenres = $derived.by(() => {
         return [{ label: "All Genres", value: "" }, ...page.data.genres];
     });
@@ -34,15 +35,22 @@
             return filter.status.split(",").includes(String(item.value));
         });
     });
+
+    const debouncedSearch = debounce(
+        (e: Event) =>
+            (filter.searchQuery = (e.target as HTMLInputElement).value),
+        300,
+    );
 </script>
 
 <div
     class="flex flex-wrap gap-2 text-base font-medium text-gray-900 rounded-md w-full max-h-fit"
 >
     <InputField
-        bind:value={filter.searchQuery}
+        bind:value={searchValue}
         placeholder="Search anime..."
         class="border-naro-300 !py-2.5 !min-w-[270px]"
+        oninput={debouncedSearch}
     />
 
     <DynamicSelect

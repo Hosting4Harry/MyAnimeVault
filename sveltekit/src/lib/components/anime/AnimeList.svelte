@@ -1,38 +1,18 @@
 <script lang="ts">
-    import { page } from "$app/stores"; // Corrected from "$app/state"
+    import { page } from "$app/state";
     import { addToast } from "$lib/store/toast-store";
-    import type {
-        Anime,
-        AnimeStatus,
-        FilterProps,
-    } from "$lib/types/anime.types";
-    import type { Option } from "$lib/types/data.types";
-    import {
-        ChevronDown,
-        Plus,
-        Pencil,
-        Trash2,
-        Clock,
-        Trophy,
-        Calendar,
-        Ban,
-        Grid,
-        List,
-        FileText,
-    } from "lucide-svelte";
+    import type { Anime } from "$lib/types/anime.types";
+
     import DynamicComponent from "../building-blocks/DynamicComponent.svelte";
-    import FilterSection from "./FilterSection.svelte";
     import QuickBall from "./QuickBall.svelte";
     let {
         isDialogOpen = $bindable(),
         selectedAnime = $bindable(),
         revalidate = $bindable(),
-        filter = $bindable(),
         filteredAnime,
     }: {
         isDialogOpen: boolean;
         revalidate: boolean;
-        filter: FilterProps;
         selectedAnime: Anime | null;
         filteredAnime: Anime[];
     } = $props();
@@ -87,17 +67,17 @@
 
     $effect(() => {
         animeList = filteredAnime;
+        currentDesign = page.url.searchParams.get("design") as keyof typeof designs || "default"  
     });
 </script>
 
-<div class="container mx-auto px-4 py-6">
-    <QuickBall bind:currentDesign bind:isDialogOpen  bind:selectedAnime/>
+<div class="mx-auto px-4 py-6">
+    <QuickBall bind:currentDesign bind:isDialogOpen bind:selectedAnime />
 
     <DynamicComponent
         name={currentDesign}
         {animeList}
         {openEditModal}
         {deleteAnime}
-        {filter}
     />
 </div>

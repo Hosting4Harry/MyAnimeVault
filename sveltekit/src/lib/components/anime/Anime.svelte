@@ -44,9 +44,9 @@
     });
 </script>
 
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6 w-full">
     <div class="flex flex-wrap justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">My Anime List</h1>
+        <h3 class="text-2xl font-bold text-gray-800">My Anime List</h3>
         <div>
             <FilterSection bind:filter />
         </div>
@@ -58,18 +58,8 @@
         bind:selectedAnime
         bind:isDialogOpen
         bind:revalidate
-        bind:filter
     />
-    <!-- Add Button -->
-    <!-- <button
-        onclick={() => {
-            selectedAnime = null;
-            isDialogOpen = true;
-        }}
-        class="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white h-14 w-14 rounded-full shadow-lg flex md:hidden items-center justify-center transition-colors"
-    >
-        +
-    </button> -->
+
 </div>
 <!-- Add Anime Dialog -->
 <AddAnimeModal bind:isDialogOpen {selectedAnime} bind:revalidate />
