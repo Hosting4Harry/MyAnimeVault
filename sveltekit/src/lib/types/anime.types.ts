@@ -15,6 +15,7 @@ export interface Anime {
     genreIds: string;
     startDate?: string;
     completionDate?: string;
+    updatedAt?: string;
 }
 
 export interface FilterProps {
@@ -28,4 +29,5 @@ export type ComponentProps = {
     animeList: Anime[];
     openEditModal: (anime: Anime) => void;
     deleteAnime: (id: number) => Promise<void>;
+    isLoading: boolean;
 };

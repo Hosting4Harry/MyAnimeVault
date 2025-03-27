@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { Pencil, Trash2 } from "lucide-svelte";
+    import { Loader, Loader2, LoaderCircle, Pencil, Trash2 } from "lucide-svelte";
     import type { ComponentProps } from "$lib/types/anime.types";
-    import { convertDate } from "$lib/utils/date-utils";
-    let { animeList, openEditModal, deleteAnime }: ComponentProps = $props();
+    import { convertDate, convertDateTime } from "$lib/utils/date-utils";
+    let { animeList, openEditModal, deleteAnime, isLoading }: ComponentProps =
+        $props();
 
     function getStatusColor(status: string) {
         const colors = {
@@ -48,70 +49,80 @@
             </tr>
         </thead>
         <tbody>
-            {#if animeList.length === 0}
+            {#if isLoading}
                 <tr>
-                    <td colspan="7" class="text-center text-gray-500">No anime found</td>
+                    <td colspan="7" class="text-center text-gray-500">
+                        <i class="animate-spin"><Loader /></i>
+                    </td>
+                </tr>
+            {:else if animeList.length === 0}
+                <tr>
+                    <td colspan="7" class="text-center text-gray-500"
+                        >No anime found</td
+                    >
                 </tr>
             {:else}
                 {#each animeList as anime (anime.id)}
                     <tr class="hover:bg-gray-50 border-b">
                         <td class="px-6 py-4 text-right">
-                        <div class="flex justify-end space-x-2">
-                            <button
-                                class="text-indigo-600 hover:text-indigo-800"
-                                onclick={() => openEditModal(anime)}
-                            >
-                                <Pencil size={20} />
-                            </button>
-                            <button
-                                class="text-red-600 hover:text-red-800"
-                                onclick={() => deleteAnime(anime.id)}
-                            >
-                                <Trash2 size={20} />
-                            </button>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex flex-col">
-                            <span class="font-semibold">{anime.title}</span>
-                            <span class="text-sm text-gray-500"
-                                >Rating: {anime.rating || "N/A"}</span
-                            >
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span
-                            class={`px-2 py-1 text-xs rounded-full capitalize ${getStatusColor(anime.status)}`}
-                        >
-                            {anime.status.replaceAll("_", " ")}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-center max-w-20 min-w-20">
-                        <span class="text-xs text-gray-500">
-                            {anime.episodesWatched}/{anime.episodes}
-                        </span>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div
-                                class="bg-blue-600 h-2.5 rounded-full"
-                                style="width: {Math.min(
-                                    100,
-                                    (anime.episodesWatched / anime.episodes) *
-                                        100,
-                                )}%"
-                            ></div>
-                        </div>
+                            <div class="flex justify-end space-x-2">
+                                <button
+                                    class="text-indigo-600 hover:text-indigo-800"
+                                    onclick={() => openEditModal(anime)}
+                                >
+                                    <Pencil size={20} />
+                                </button>
+                                <button
+                                    class="text-red-600 hover:text-red-800"
+                                    onclick={() => deleteAnime(anime.id)}
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+                            </div>
                         </td>
-                    <td class="px-6 py-4 text-center max-w-20 min-w-20">
-                        <span class="text-xs text-gray-500">
-                            {convertDate(anime.startDate)}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-center max-w-20 min-w-20">
-                        <span class="text-xs text-gray-500">{convertDate(anime.completionDate)}</span>
-                    </td>
-                    
-                </tr>
-            {/each}
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col">
+                                <span class="font-semibold">{anime.title}</span>
+                                <span class="text-sm text-gray-500"
+                                    >Rating: {anime.rating || "N/A"}</span
+                                >
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span
+                                class={`px-2 py-1 text-xs rounded-full capitalize ${getStatusColor(anime.status)}`}
+                            >
+                                {anime.status.replaceAll("_", " ")}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-center max-w-20 min-w-20">
+                            <span class="text-xs text-gray-500">
+                                {anime.episodesWatched}/{anime.episodes}
+                            </span>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div
+                                    class="bg-blue-600 h-2.5 rounded-full"
+                                    style="width: {Math.min(
+                                        100,
+                                        (anime.episodesWatched /
+                                            anime.episodes) *
+                                            100,
+                                    )}%"
+                                ></div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center max-w-20 min-w-20">
+                            <span class="text-xs text-gray-500">
+                                {convertDate(anime.startDate)}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-center max-w-20 min-w-20">
+                            <span class="text-xs text-gray-500"
+                                >{convertDate(anime.completionDate)}</span
+                            >
+                        </td>
+                    </tr>
+                {/each}
             {/if}
         </tbody>
     </table>

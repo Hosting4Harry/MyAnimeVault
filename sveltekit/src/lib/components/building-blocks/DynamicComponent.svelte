@@ -7,8 +7,9 @@
     animeList: Anime[];
     openEditModal: (anime: Anime) => void;
     deleteAnime: (id: number) => Promise<void>;
+    isLoading: boolean;
   };
-  let { name, animeList, openEditModal, deleteAnime }: ComponentProps =
+  let { name, animeList, openEditModal, deleteAnime, isLoading }: ComponentProps =
     $props();
 
   async function getComponent(component: string): Promise<Component<any>> {

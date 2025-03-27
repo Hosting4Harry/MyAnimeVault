@@ -89,6 +89,7 @@
         };
         selectedStatus = [{ label: "Plan to Watch", value: "plan_to_watch" }];
         selectedGenre = [];
+        selectedAnime = anime;
     }
 
     const statusOptions = [
@@ -100,18 +101,19 @@
 
     // Only run this effect when selectedAnime changes, not on every render
     $effect(() => {
+        debugger
         if (selectedAnime) {
             anime = JSON.parse(JSON.stringify(selectedAnime));
 
             // Set the selected status
             selectedStatus = statusOptions.filter(
-                (item) => item.value === selectedAnime.status,
+                (item) => item.value === selectedAnime?.status,
             );
 
             // Set the selected genres
             if (uniqueGenres && selectedAnime.genreIds) {
                 selectedGenre = uniqueGenres.filter((item) =>
-                    selectedAnime.genreIds
+                    selectedAnime?.genreIds
                         .split(",")
                         .map(Number)
                         .includes(item.value as number),
@@ -237,8 +239,8 @@
                 </button>
                 <button
                     onclick={() => {
-                        isDialogOpen = false;
                         resetForm();
+                        isDialogOpen = false;
                     }}
                     class="flex-1 border border-neutral-800 hover:border-neutral-950 bg-white text-neutral-950 px-4 py-2 rounded"
                 >

@@ -1,5 +1,6 @@
 export const convertDateTime = (dateTimeString: string | undefined) => {
     if (!dateTimeString || dateTimeString === "") return 'N/A';
+    debugger
     dateTimeString = new Date(dateTimeString).toISOString();
     // Split the given date string
     const dateTimeParts = dateTimeString?.split("T") ?? '';

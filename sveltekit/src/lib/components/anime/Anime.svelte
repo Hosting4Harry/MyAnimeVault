@@ -19,9 +19,11 @@
 
     // Reactive value for filtered anime list
     let filteredAnime = $state([] as Anime[]);
+    let isLoading = $state(false);
 
     const fetchData = async () => {
         try {
+            isLoading = true;
             const queryParams = new URLSearchParams();
 
             if (filter.searchQuery)
@@ -37,11 +39,14 @@
             filteredAnime = data; // Update store value
         } catch (error) {
             console.error("Error fetching filtered anime:", error);
+        } finally {
+            isLoading = false;
         }
     };
     $effect(() => {
         fetchData();
     });
+    $inspect(selectedAnime);
 </script>
 
 <div class="flex flex-col gap-6 w-full">
@@ -58,8 +63,8 @@
         bind:selectedAnime
         bind:isDialogOpen
         bind:revalidate
+        {isLoading}
     />
-
 </div>
 <!-- Add Anime Dialog -->
 <AddAnimeModal bind:isDialogOpen {selectedAnime} bind:revalidate />

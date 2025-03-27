@@ -10,11 +10,13 @@
         selectedAnime = $bindable(),
         revalidate = $bindable(),
         filteredAnime,
+        isLoading,
     }: {
         isDialogOpen: boolean;
         revalidate: boolean;
         selectedAnime: Anime | null;
         filteredAnime: Anime[];
+        isLoading: boolean;
     } = $props();
 
     const designs = {
@@ -31,7 +33,7 @@
     }
 
     function openEditModal(anime: Anime) {
-        selectedAnime = anime;
+        selectedAnime = JSON.parse(JSON.stringify(anime));
         isDialogOpen = true;
     }
 
@@ -67,7 +69,9 @@
 
     $effect(() => {
         animeList = filteredAnime;
-        currentDesign = page.url.searchParams.get("design") as keyof typeof designs || "default"  
+        currentDesign =
+            (page.url.searchParams.get("design") as keyof typeof designs) ||
+            "default";
     });
 </script>
 
@@ -79,5 +83,6 @@
         {animeList}
         {openEditModal}
         {deleteAnime}
+        {isLoading}
     />
 </div>

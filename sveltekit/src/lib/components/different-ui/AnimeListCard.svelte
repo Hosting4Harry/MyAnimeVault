@@ -1,8 +1,10 @@
 <script lang="ts">
     import type { ComponentProps } from "$lib/types/anime.types";
-    import { Pencil, Trash2 } from "lucide-svelte";
+    import { convertDate } from "$lib/utils/date-utils";
+    import { Loader, Pencil, Trash2 } from "lucide-svelte";
 
-    let { animeList, openEditModal, deleteAnime }: ComponentProps = $props();
+    let { animeList, openEditModal, deleteAnime, isLoading }: ComponentProps =
+        $props();
 
     function getStatusColor(status: string) {
         const colors = {
@@ -17,64 +19,73 @@
     }
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    {#if animeList.length === 0}
-        <div class="text-center text-gray-500">No anime found</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {#if isLoading}
+        <div class=" flex justify-center text-left text-gray-500 items-center">
+            <i class="animate-spin"><Loader /></i>
+        </div>
+    {:else if animeList.length === 0}
+        <div class="text-left text-gray-500">No anime found {isLoading}</div>
     {:else}
         {#each animeList as anime (anime.id)}
-            <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition">
+            <div
+                class="bg-white rounded-lg shadow p-4 hover:shadow-md transition col-span-1 sm:col-span-1 md:col-span-1 min-w-[348px] flex flex-col h-full"
+            >
                 <div class="flex justify-between items-start mb-3">
-                <div>
-                    <h3 class="text-lg font-semibold">{anime.title}</h3>
-                    <p class="text-sm text-gray-500">
-                        Rating: {anime.rating || "N/A"}
-                    </p>
-                </div>
-                <span
-                    class={`px-2 py-1 text-xs rounded-full ${getStatusColor(anime.status)}`}
-                >
-                    {anime.status.replace("_", " ")}
-                </span>
-            </div>
-
-            <div class="mb-3">
-                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-1">
-                    <div
-                        class="bg-blue-600 h-2.5 rounded-full"
-                        style="width: {Math.min(
-                            100,
-                            (anime.episodesWatched / anime.episodes) * 100,
-                        )}%"
-                    ></div>
-                </div>
-                <div class="flex justify-between text-xs text-gray-500">
-                    <span>Progress</span>
-                    <span>{anime.episodesWatched}/{anime.episodes}</span>
-                </div>
-            </div>
-
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-sm text-gray-500">
-                        Started: {anime.startDate || "N/A"}
-                    </p>
-                </div>
-                <div class="flex space-x-2">
-                    <button
-                        class="text-indigo-600 hover:text-indigo-800"
-                        onclick={() => openEditModal(anime)}
+                    <div>
+                        <h3 class="text-lg font-semibold">{anime.title}</h3>
+                        <p class="text-sm text-gray-500">
+                            Rating: {anime?.rating || "N/A"}
+                        </p>
+                    </div>
+                    <span
+                        class={`px-2 py-1 text-xs rounded-full capitalize ${getStatusColor(anime.status)}`}
                     >
-                        <Pencil size={20} />
-                    </button>
-                    <button
-                        class="text-red-600 hover:text-red-800"
-                        onclick={() => deleteAnime(anime.id)}
-                    >
-                        <Trash2 size={20} />
-                    </button>
+                        {anime.status.replaceAll("_", " ")}
+                    </span>
+                </div>
+
+                <div class="flex-grow"></div>
+                <!-- Pushes the rest to the bottom -->
+
+                <!-- Progress Bar -->
+                <div class="mb-3 mt-auto">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-1">
+                        <div
+                            class="bg-blue-600 h-2.5 rounded-full"
+                            style="width: {Math.min(
+                                100,
+                                (anime.episodesWatched / anime.episodes) * 100,
+                            )}%"
+                        ></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>Progress</span>
+                        <span>{anime.episodesWatched}/{anime.episodes}</span>
+                    </div>
+                </div>
+
+                <!-- Date and Buttons -->
+                <div class="flex justify-between items-center mt-auto">
+                    <p class="text-sm text-gray-500">
+                        Started: {convertDate(anime.startDate) || "N/A"}
+                    </p>
+                    <div class="flex space-x-2">
+                        <button
+                            class="text-indigo-600 hover:text-indigo-800"
+                            onclick={() => openEditModal(anime)}
+                        >
+                            <Pencil size={20} />
+                        </button>
+                        <button
+                            class="text-red-600 hover:text-red-800"
+                            onclick={() => deleteAnime(anime.id)}
+                        >
+                            <Trash2 size={20} />
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         {/each}
     {/if}
 </div>

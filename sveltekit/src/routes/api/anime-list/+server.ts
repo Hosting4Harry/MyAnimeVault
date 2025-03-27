@@ -26,7 +26,7 @@ export const GET: RequestHandler = async ({ url }) => {
         sql += ` AND (${genreConditions})`;
         values.push(...genreArray);
     }
-
+    sql += ` ORDER BY updatedAt DESC`;
     try {
         const res = await executeQuery(sql, values);
         return json(res);
@@ -85,7 +85,7 @@ export const POST: RequestHandler = async ({ request }) => {
             ];
         } else {
             sql = `UPDATE Animes 
-                   SET title = ?, status = ?, episodes = ?, episodesWatched = ?, startDate = ?, completionDate = ?, rating = ?, genreIds = ?
+                   SET title = ?, status = ?, episodes = ?, episodesWatched = ?, startDate = ?, completionDate = ?, rating = ?, genreIds = ?, updatedAt = ?
                    WHERE id = ?`;
             values = [
                 data.title,
@@ -96,6 +96,7 @@ export const POST: RequestHandler = async ({ request }) => {
                 completionDate,
                 data.rating,
                 data.genreIds,
+                new Date().toISOString().replace('T', ' ').replace('Z', ''),
                 data.id,
             ];
         }

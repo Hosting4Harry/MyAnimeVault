@@ -30,6 +30,7 @@
             episodes: 0,
             episodesWatched: 0,
             genreIds: "",
+            
         };
         isDialogOpen = true;
     }
