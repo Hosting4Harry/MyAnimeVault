@@ -35,7 +35,7 @@
 <!-- Floating Action Button -->
 <div
     role="none"
-    class="fixed bottom-6 right-6 bg-indigo-600 text-white p-4 rounded-full shadow-lg cursor-pointer transition-transform transform hover:scale-110"
+    class="fixed bottom-6 right-6 bg-slate-800 text-white p-4 rounded-full shadow-lg cursor-pointer transition-transform transform hover:scale-110"
     onclick={() => (isExpanded = !isExpanded)}
 >
     {#if isExpanded}
@@ -51,28 +51,28 @@
 >
     {#if isExpanded}
         <button
-            class="bg-indigo-600 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={openDialog}
         >
             <Plus />
         </button>
         <button
-            class="bg-indigo-600 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("default")}
         >
-            <List class="text-current" />
+            <List class="text-current {currentDesign==='default' ? 'text-indigo-500' : 'text-current'}" />
         </button>
         <button
-            class="bg-indigo-600 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("card")}
         >
-            <Grid class="text-current" />
+            <Grid class="text-current {currentDesign==='card' ? 'text-indigo-500' : 'text-current'}" />
         </button>
         <button
-            class="bg-indigo-600 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("compact")}
         >
-            <FileText class="text-current" />
+            <FileText class="text-current {currentDesign==='compact' ? 'text-indigo-500' : 'text-current'}" />
         </button>
     {/if}
 </div>
