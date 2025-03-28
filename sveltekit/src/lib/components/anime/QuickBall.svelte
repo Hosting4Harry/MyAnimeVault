@@ -39,7 +39,7 @@
 <!-- Floating Action Button -->
 <div
     role="none"
-    class="fixed bottom-6 right-6 bg-slate-800 text-white p-4 rounded-full shadow-lg cursor-pointer transition-transform transform hover:scale-110"
+    class="fixed bottom-6 right-6 bg-gray-500 text-black p-4 rounded-full shadow-lg cursor-pointer transition-transform transform hover:scale-110"
     onclick={() => (isExpanded = !isExpanded)}
 >
     {#if isExpanded}
@@ -55,13 +55,13 @@
 >
     {#if isExpanded}
         <button
-            class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            class="bg-gray-500 text-black p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={openDialog}
         >
             <Plus />
         </button>
         <button
-            class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            class="bg-gray-500 text-black p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("default")}
         >
             <List
@@ -71,7 +71,7 @@
             />
         </button>
         <button
-            class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            class="bg-gray-500 text-black p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("card")}
         >
             <Grid
@@ -81,7 +81,7 @@
             />
         </button>
         <button
-            class="bg-slate-800 text-white p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
+            class="bg-gray-500 text-black p-3 rounded-full shadow-md transition-all transform translate-y-0 opacity-100 duration-300 hover:scale-110"
             onclick={() => toggleDesign("compact")}
         >
             <FileText
