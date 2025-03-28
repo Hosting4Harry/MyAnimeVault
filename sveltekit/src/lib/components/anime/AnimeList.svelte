@@ -10,13 +10,11 @@
         selectedAnime = $bindable(),
         revalidate = $bindable(),
         filteredAnime,
-        isLoading,
     }: {
         isDialogOpen: boolean;
         revalidate: boolean;
         selectedAnime: Anime | null;
         filteredAnime: Anime[];
-        isLoading: boolean;
     } = $props();
 
     const designs = {
@@ -25,7 +23,7 @@
         compact: "compact",
     } as const;
 
-    let currentDesign = $state<keyof typeof designs>("default");
+    let currentDesign = $state<keyof typeof designs>("card");
     let animeList = $state<Anime[]>(filteredAnime);
 
     function toggleDesign(design: keyof typeof designs) {
@@ -71,7 +69,7 @@
         animeList = filteredAnime;
         currentDesign =
             (page.url.searchParams.get("design") as keyof typeof designs) ||
-            "default";
+            "card";
     });
 </script>
 
@@ -83,6 +81,5 @@
         {animeList}
         {openEditModal}
         {deleteAnime}
-        {isLoading}
     />
 </div>

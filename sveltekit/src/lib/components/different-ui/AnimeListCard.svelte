@@ -3,7 +3,7 @@
     import { convertDate } from "$lib/utils/date-utils";
     import { Loader, Pencil, Trash2 } from "lucide-svelte";
 
-    let { animeList, openEditModal, deleteAnime, isLoading }: ComponentProps =
+    let { animeList, openEditModal, deleteAnime }: ComponentProps =
         $props();
 
     function getStatusColor(status: string) {
@@ -20,20 +20,16 @@
 </script>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    {#if isLoading}
-        <div class=" flex justify-center text-left text-gray-500 items-center">
-            <i class="animate-spin"><Loader /></i>
-        </div>
-    {:else if animeList.length === 0}
-        <div class="text-left text-gray-500">No anime found {isLoading}</div>
+    {#if animeList.length === 0}
+        <div class="text-left text-gray-500">No anime found</div>
     {:else}
         {#each animeList as anime (anime.id)}
             <div
-                class="bg-white rounded-lg shadow p-4 hover:shadow-md transition col-span-1 sm:col-span-1 md:col-span-1 min-w-[348px] flex flex-col h-full"
+                class="rounded-lg shadow-3xl p-4 hover:shadow-md transition col-span-1 min-w-[348px] sm:min-w-[250px] md:min-w-[348px] flex flex-col h-full bg-gray-800 text-[#f3f4f6]"
             >
                 <div class="flex justify-between items-start mb-3">
                     <div>
-                        <h3 class="text-lg font-semibold">{anime.title}</h3>
+                        <h3 class="text-lg font-medium">{anime.title}</h3>
                         <p class="text-sm text-gray-500">
                             Rating: {anime?.rating || "N/A"}
                         </p>
@@ -50,9 +46,9 @@
 
                 <!-- Progress Bar -->
                 <div class="mb-3 mt-auto">
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-1">
+                    <div class="w-full bg-neutral-200 rounded-full h-2.5 mb-1">
                         <div
-                            class="bg-blue-600 h-2.5 rounded-full"
+                            class="bg-gray-500 h-2.5 rounded-full"
                             style="width: {Math.min(
                                 100,
                                 (anime.episodesWatched / anime.episodes) * 100,

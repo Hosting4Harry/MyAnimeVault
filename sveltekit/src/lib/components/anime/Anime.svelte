@@ -4,6 +4,7 @@
         AnimeStatus,
         FilterProps,
     } from "$lib/types/anime.types";
+    import { LoaderCircle } from "lucide-svelte";
     import AddAnimeModal from "./AddAnimeModal.svelte";
     import AnimeList from "./AnimeList.svelte";
     import FilterSection from "./FilterSection.svelte";
@@ -29,42 +30,40 @@
             if (filter.searchQuery)
                 queryParams.append("name", filter.searchQuery);
             if (filter.status) queryParams.append("status", filter.status);
-            if (filter.genre?.length)
-                queryParams.append("genreIds", filter?.genre);
+            if (filter.genre) queryParams.append("genreIds", filter?.genre);
 
+            console.log(queryParams.toString());
             const res = await fetch(
                 `/api/anime-list?${queryParams.toString()}`,
             );
-            const data = await res.json();
-            filteredAnime = data; // Update store value
+            const response = await res.json();
+            filteredAnime = response.data;
+            isLoading = false;
         } catch (error) {
             console.error("Error fetching filtered anime:", error);
-        } finally {
             isLoading = false;
         }
     };
     $effect(() => {
         fetchData();
     });
-    $inspect(selectedAnime);
+    $inspect(filter);
 </script>
 
-<div class="flex flex-col gap-6 w-full">
-    <div class="flex flex-wrap justify-between items-center mb-6">
-        <h3 class="text-2xl font-bold text-gray-800">My Anime List</h3>
-        <div>
-            <FilterSection bind:filter />
-        </div>
+<FilterSection bind:filter />
+{#if isLoading}
+    <div class="flex justify-center text-left text-gray-500 items-center">
+        <i class="animate-spin"><LoaderCircle /></i>
     </div>
-
+{:else}
     <!-- Main Content -->
     <AnimeList
         {filteredAnime}
         bind:selectedAnime
         bind:isDialogOpen
         bind:revalidate
-        {isLoading}
     />
-</div>
+{/if}
+
 <!-- Add Anime Dialog -->
 <AddAnimeModal bind:isDialogOpen {selectedAnime} bind:revalidate />

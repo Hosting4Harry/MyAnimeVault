@@ -29,5 +29,4 @@ export type ComponentProps = {
     animeList: Anime[];
     openEditModal: (anime: Anime) => void;
     deleteAnime: (id: number) => Promise<void>;
-    isLoading: boolean;
 };

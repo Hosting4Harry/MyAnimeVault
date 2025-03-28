@@ -26,13 +26,18 @@ export const GET: RequestHandler = async ({ url }) => {
         sql += ` AND (${genreConditions})`;
         values.push(...genreArray);
     }
+
     sql += ` ORDER BY updatedAt DESC`;
     try {
         const res = await executeQuery(sql, values);
-        return json(res);
+        return json({
+            success: true,
+            message: "Anime list fetched successfully.",
+            data: res,
+        });
     } catch (error) {
         console.error(error);
-        return new Response(JSON.stringify({ success: false, message: "Something went wrong." }), { status: 500 });
+        return new Response(JSON.stringify({ success: false, message: "Something went wrong.", data: [] }), { status: 500 });
     }
 };
 

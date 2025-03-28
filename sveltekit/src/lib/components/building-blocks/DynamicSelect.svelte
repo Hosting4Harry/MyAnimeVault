@@ -4,8 +4,8 @@
   import DownArrowHead from "$lib/icons/DownArrowHead.svelte";
   import { onMount } from "svelte";
   import FormMessage from "./FormMessage.svelte";
-    import type { Option } from "$lib/types/data.types";
-    import DynamicIcon from "./DynamicIcon.svelte";
+  import type { Option } from "$lib/types/data.types";
+  import DynamicIcon from "./DynamicIcon.svelte";
 
   let showMenu = $state(false);
   let searchValue = $state("");
@@ -53,7 +53,7 @@
     onChange?: (selected: Option[]) => void;
     enableSearch?: boolean;
     errorMessage?: string;
-    enableRemoveOption?: boolean; //This is for single mode only
+    enableRemoveOption?: boolean;
   } = $props();
 
   $effect(() => {
@@ -183,13 +183,13 @@
 </script>
 
 <div
-  class="relative text-[#222222] {customClass} group {disabled &&
+  class="relative text-[#222222] {customClass} rounded group {disabled &&
     'cursor-not-allowed'}"
   bind:this={selectRef}
 >
   <div
     role="none"
-    class="multi-select-area-{id} relative inline-block font-[400] text-left w-full"
+    class="multi-select-area-{id} relative inline-block  text-left w-full"
     onclick={() => {
       if (!disabled) {
         showMenu = !showMenu;
@@ -260,7 +260,7 @@
     <input
       {id}
       {name}
-      class="flex justify-between items-center bg-white appearance-none p-3 border border-[#9c9c9c] rounded text-sm outline outline-0 w-full disabled:bg-gray-500 !pr-6 disabled:cursor-not-allowed {inputClass}"
+      class="flex justify-between items-center bg-white appearance-none p-3 border border-[#9c9c9c] rounded outline outline-0 w-full disabled:bg-gray-500 !pr-6 disabled:cursor-not-allowed {inputClass}"
       placeholder={selectedValues.length > 0 ? "" : placeholder}
       {required}
       {disabled}
@@ -282,57 +282,55 @@
       class="select-dropdown fixed z-40 border rounded shadow-2xl bg-white {optionContainerClass}"
       style="top: {dropdownPosition.top}px; left: {dropdownPosition.left}px; width: {dropdownPosition.width}px;"
     >
-      <div class="p-2">
-        <div class="overflow-y-auto" style="max-height: {maxHeight}">
-          {#if filteredOptions?.length > 0}
-            {#each filteredOptions as option (option.value)}
-              <div
+      <div class="overflow-y-auto rounded" style="max-height: {maxHeight}">
+        {#if filteredOptions?.length > 0}
+          {#each filteredOptions as option (option.value)}
+            <div
+              role="none"
+              class="w-full flex items-center gap-2 p-2 hover:bg-gray-50 cursor-pointer {optionClass}"
+              onclick={() => handleSelect(option)}
+            >
+              {#if mode === "multi"}
+                <Checkbox
+                  id={"checkbox-" + option.value}
+                  checked={selectedValues.some(
+                    (o) => o.value === option.value
+                  )}
+                />
+              {/if}
+              <label
                 role="none"
-                class="w-full flex items-center gap-2 p-2 hover:bg-gray-50 cursor-pointer {optionClass}"
-                onclick={() => handleSelect(option)}
+                class="flex cursor-pointer flex-1 gap-4 items-center"
+                for={mode === "multi"
+                  ? "checkbox-" + option.value
+                  : undefined}
+                onclick={(e) => {
+                  if (mode === "multi") {
+                    e.stopPropagation();
+                  }
+                }}
               >
-                {#if mode === "multi"}
-                  <Checkbox
-                    id={"checkbox-" + option.value}
-                    checked={selectedValues.some(
-                      (o) => o.value === option.value
-                    )}
-                  />
+                {#if mode !== "multi" && option?.icon}
+                  <i class="h-5 w-5 flex-shrink-0" aria-hidden="true">
+                    <DynamicIcon icon={option.icon.toLowerCase()} />
+                  </i>
                 {/if}
-                <label
-                  role="none"
-                  class="flex cursor-pointer flex-1 gap-4 items-center"
-                  for={mode === "multi"
-                    ? "checkbox-" + option.value
-                    : undefined}
-                  onclick={(e) => {
-                    if (mode === "multi") {
-                      e.stopPropagation();
-                    }
-                  }}
-                >
-                  {#if mode !== "multi" && option?.icon}
-                    <i class="h-5 w-5 flex-shrink-0" aria-hidden="true">
-                      <DynamicIcon icon={option.icon.toLowerCase()} />
-                    </i>
-                  {/if}
-                  <span>{option.label}</span>
-                  {#if mode === "multi" && option?.icon}
-                    <i class="h-5 w-5 flex-shrink-0" aria-hidden="true">
-                      <DynamicIcon icon={option.icon.toLowerCase()} />
-                    </i>
-                  {/if}
-                </label>
+                <span>{option.label}</span>
+                {#if mode === "multi" && option?.icon}
+                  <i class="h-5 w-5 flex-shrink-0" aria-hidden="true">
+                    <DynamicIcon icon={option.icon.toLowerCase()} />
+                  </i>
+                {/if}
+              </label>
 
-                {#if mode === "single" && selectedValues.some((o) => o.value === option.value)}
-                  <i class="text-[#007AFF]">✓</i>
-                {/if}
-              </div>
-            {/each}
-          {:else}
-            <div class="p-2">{noOptionsMessage}</div>
-          {/if}
-        </div>
+              {#if mode === "single" && selectedValues.some((o) => o.value === option.value)}
+                <i class="text-[#007AFF]">✓</i>
+              {/if}
+            </div>
+          {/each}
+        {:else}
+          <div class="p-2">{noOptionsMessage}</div>
+        {/if}
       </div>
     </div>
   {/if}

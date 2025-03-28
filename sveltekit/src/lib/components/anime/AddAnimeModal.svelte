@@ -101,7 +101,6 @@
 
     // Only run this effect when selectedAnime changes, not on every render
     $effect(() => {
-        debugger
         if (selectedAnime) {
             anime = JSON.parse(JSON.stringify(selectedAnime));
 
@@ -125,14 +124,14 @@
 
 {#if isDialogOpen}
     <div
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center"
     >
         <form
             bind:this={formElement}
             onsubmit={addAnime}
             class="bg-white rounded-lg p-6 w-[500px] max-w-full mx-4"
         >
-            <h2 class="text-xl font-bold mb-4">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
                 {isEditing ? "Edit" : "Add New"} Anime
             </h2>
             <div class="grid grid-cols-2 gap-4">

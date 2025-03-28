@@ -2,7 +2,7 @@
     import { Loader, Loader2, LoaderCircle, Pencil, Trash2 } from "lucide-svelte";
     import type { ComponentProps } from "$lib/types/anime.types";
     import { convertDate, convertDateTime } from "$lib/utils/date-utils";
-    let { animeList, openEditModal, deleteAnime, isLoading }: ComponentProps =
+    let { animeList, openEditModal, deleteAnime }: ComponentProps =
         $props();
 
     function getStatusColor(status: string) {
@@ -18,9 +18,9 @@
     }
 </script>
 
-<div class="bg-white rounded-lg shadow overflow-x-auto">
+<div class="bg-gray-800 rounded-lg shadow overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+        <thead class="bg-gray-800">
             <tr>
                 <th
                     class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
@@ -49,13 +49,7 @@
             </tr>
         </thead>
         <tbody>
-            {#if isLoading}
-                <tr>
-                    <td colspan="7" class="text-center text-gray-500">
-                        <i class="animate-spin"><Loader /></i>
-                    </td>
-                </tr>
-            {:else if animeList.length === 0}
+            {#if animeList.length === 0}
                 <tr>
                     <td colspan="7" class="text-center text-gray-500"
                         >No anime found</td
@@ -63,7 +57,7 @@
                 </tr>
             {:else}
                 {#each animeList as anime (anime.id)}
-                    <tr class="hover:bg-gray-50 border-b">
+                    <tr class="border-b hover:shadow-inset transition hover:scale-100">
                         <td class="px-6 py-4 text-right">
                             <div class="flex justify-end space-x-2">
                                 <button
@@ -82,7 +76,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex flex-col">
-                                <span class="font-semibold">{anime.title}</span>
+                                <span class="font-medium">{anime.title}</span>
                                 <span class="text-sm text-gray-500"
                                     >Rating: {anime.rating || "N/A"}</span
                                 >
@@ -95,13 +89,13 @@
                                 {anime.status.replaceAll("_", " ")}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center max-w-20 min-w-20">
-                            <span class="text-xs text-gray-500">
+                        <td class="px-6 py-4 text-center max-w-20 min-w-20 group relative">
+                            <span class="text-xs text-gray-500 group-hover:block hidden absolute top-4 left-1/2 -translate-x-1/2">
                                 {anime.episodesWatched}/{anime.episodes}
                             </span>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
                                 <div
-                                    class="bg-blue-600 h-2.5 rounded-full"
+                                    class="bg-gray-500 h-2.5 rounded-full"
                                     style="width: {Math.min(
                                         100,
                                         (anime.episodesWatched /
