@@ -1,9 +1,14 @@
 <script lang="ts">
-    import { Loader, Loader2, LoaderCircle, Pencil, Trash2 } from "lucide-svelte";
+    import {
+        Loader,
+        Loader2,
+        LoaderCircle,
+        Pencil,
+        Trash2,
+    } from "lucide-svelte";
     import type { ComponentProps } from "$lib/types/anime.types";
     import { convertDate, convertDateTime } from "$lib/utils/date-utils";
-    let { animeList, openEditModal, deleteAnime }: ComponentProps =
-        $props();
+    let { animeList, openEditModal, deleteAnime }: ComponentProps = $props();
 
     function getStatusColor(status: string) {
         const colors = {
@@ -18,32 +23,32 @@
     }
 </script>
 
-<div class="bg-gray-800 rounded-lg shadow overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
+<div class="rounded-lg overflow-x-auto shadow-4xl">
+    <table class="text-left border-collapse w-full">
         <thead class="bg-gray-800">
             <tr>
                 <th
-                    class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                    class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase whitespace-nowrap"
                     >Actions</th
                 >
                 <th
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap"
                     >Title</th
                 >
                 <th
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap"
                     >Status</th
                 >
                 <th
-                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase"
+                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase whitespace-nowrap"
                     >Progress</th
                 >
                 <th
-                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase"
+                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase whitespace-nowrap"
                     >Start Date</th
                 >
                 <th
-                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase"
+                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase whitespace-nowrap"
                     >End Date</th
                 >
             </tr>
@@ -57,8 +62,10 @@
                 </tr>
             {:else}
                 {#each animeList as anime (anime.id)}
-                    <tr class="border-b hover:shadow-inset transition hover:scale-100">
-                        <td class="px-6 py-4 text-right">
+                    <tr
+                        class="border-b hover:shadow-inset transition hover:scale-100"
+                    >
+                        <td class="px-6 py-4 text-right whitespace-nowrap">
                             <div class="flex justify-end space-x-2">
                                 <button
                                     class="text-indigo-600 hover:text-indigo-800"
@@ -74,23 +81,35 @@
                                 </button>
                             </div>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex flex-col">
-                                <span class="font-medium">{anime.title}</span>
+                                <span class="font-medium"
+                                    >{anime.title}
+                                    <span class="text-sm text-gray-500">
+                                        ({anime.seasons || 1}
+                                        {anime.seasons <= 1
+                                            ? "Season"
+                                            : "Seasons"})
+                                    </span></span
+                                >
                                 <span class="text-sm text-gray-500"
                                     >Rating: {anime.rating || "N/A"}</span
                                 >
                             </div>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <span
                                 class={`px-2 py-1 text-xs rounded-full capitalize ${getStatusColor(anime.status)}`}
                             >
                                 {anime.status.replaceAll("_", " ")}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center max-w-20 min-w-20 group relative">
-                            <span class="text-xs text-gray-500 group-hover:block hidden absolute top-4 left-1/2 -translate-x-1/2">
+                        <td
+                            class="px-6 py-4 text-center max-w-20 min-w-20 group relative whitespace-nowrap"
+                        >
+                            <span
+                                class="text-xs text-gray-500 group-hover:block hidden absolute top-4 left-1/2 -translate-x-1/2"
+                            >
                                 {anime.episodesWatched}/{anime.episodes}
                             </span>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
@@ -105,12 +124,16 @@
                                 ></div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-center max-w-20 min-w-20">
+                        <td
+                            class="px-6 py-4 text-center max-w-20 min-w-20 whitespace-nowrap"
+                        >
                             <span class="text-xs text-gray-500">
                                 {convertDate(anime.startDate)}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center max-w-20 min-w-20">
+                        <td
+                            class="px-6 py-4 text-center max-w-20 min-w-20 whitespace-nowrap"
+                        >
                             <span class="text-xs text-gray-500"
                                 >{convertDate(anime.completionDate)}</span
                             >

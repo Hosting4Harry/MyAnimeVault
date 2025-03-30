@@ -2,33 +2,24 @@
     import { page } from "$app/state";
     import { addToast } from "$lib/store/toast-store";
     import type { Anime } from "$lib/types/anime.types";
-
     import DynamicComponent from "../building-blocks/DynamicComponent.svelte";
-    import QuickBall from "./QuickBall.svelte";
     let {
         isDialogOpen = $bindable(),
         selectedAnime = $bindable(),
         revalidate = $bindable(),
         filteredAnime,
+        currentDesign
     }: {
         isDialogOpen: boolean;
         revalidate: boolean;
         selectedAnime: Anime | null;
         filteredAnime: Anime[];
+        currentDesign: string;
     } = $props();
 
-    const designs = {
-        default: "default",
-        card: "card",
-        compact: "compact",
-    } as const;
-
-    let currentDesign = $state<keyof typeof designs>("card");
     let animeList = $state<Anime[]>(filteredAnime);
 
-    function toggleDesign(design: keyof typeof designs) {
-        currentDesign = design;
-    }
+
 
     function openEditModal(anime: Anime) {
         selectedAnime = JSON.parse(JSON.stringify(anime));
@@ -67,14 +58,10 @@
 
     $effect(() => {
         animeList = filteredAnime;
-        currentDesign =
-            (page.url.searchParams.get("design") as keyof typeof designs) ||
-            "card";
     });
 </script>
 
 <div class="mx-auto px-4 py-6">
-    <QuickBall bind:currentDesign bind:isDialogOpen bind:selectedAnime />
 
     <DynamicComponent
         name={currentDesign}

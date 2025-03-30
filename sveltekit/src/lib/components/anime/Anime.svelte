@@ -8,10 +8,12 @@
     import AddAnimeModal from "./AddAnimeModal.svelte";
     import AnimeList from "./AnimeList.svelte";
     import FilterSection from "./FilterSection.svelte";
+    import QuickBall from "./QuickBall.svelte";
+    import { page } from "$app/state";
     let { revalidate = $bindable() }: { revalidate: boolean } = $props();
     let isDialogOpen = $state(false);
     let selectedAnime = $state<Anime | null>(null);
-
+    let currentDesign = $state<string>("card");
     let filter = $state<FilterProps>({
         status: "all" as AnimeStatus,
         searchQuery: "",
@@ -47,9 +49,12 @@
     $effect(() => {
         fetchData();
     });
-    $inspect(filter);
+    $effect(() => {
+        currentDesign =
+            (page.url.searchParams.get("design") as string) || "card";
+    });
 </script>
-
+<div>
 <FilterSection bind:filter />
 {#if isLoading}
     <div class="flex justify-center text-left text-gray-500 items-center">
@@ -62,8 +67,10 @@
         bind:selectedAnime
         bind:isDialogOpen
         bind:revalidate
+        {currentDesign}
     />
 {/if}
-
+<QuickBall bind:currentDesign bind:isDialogOpen bind:selectedAnime />
+</div>
 <!-- Add Anime Dialog -->
 <AddAnimeModal bind:isDialogOpen {selectedAnime} bind:revalidate />

@@ -8,7 +8,9 @@ export const createTables = () => {
     startDate DATE NULL,
     completionDate DATE NULL,
     rating DECIMAL(3,1) NULL,
-    genreIds VARCHAR(500) NOT NULL
+    genreIds VARCHAR(500) NOT NULL,
+    updatedAt DATETIME NULL,
+    seasons INT NULL
 );`
     const sql2 = `CREATE TABLE Genres (
     id INT PRIMARY KEY AUTO_INCREMENT,

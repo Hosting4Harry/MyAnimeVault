@@ -10,6 +10,7 @@ export interface Anime {
     title: string;
     status: AnimeStatus;
     rating?: number;
+    seasons: number;
     episodes: number;
     episodesWatched: number;
     genreIds: string;

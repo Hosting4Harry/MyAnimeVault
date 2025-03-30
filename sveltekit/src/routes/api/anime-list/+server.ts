@@ -76,8 +76,8 @@ export const POST: RequestHandler = async ({ request }) => {
                 return json({ success: false, message: "Anime already exists." });
             }
 
-            sql = `INSERT INTO Animes (title, status, episodes, episodesWatched, startDate, completionDate, rating, genreIds)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            sql = `INSERT INTO Animes (title, status, episodes, episodesWatched, startDate, completionDate, rating, genreIds, seasons)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             values = [
                 data.title,
                 data.status,
@@ -87,10 +87,11 @@ export const POST: RequestHandler = async ({ request }) => {
                 completionDate,
                 data.rating || 0,
                 data.genreIds,
+                data.seasons || 0,
             ];
         } else {
             sql = `UPDATE Animes 
-                   SET title = ?, status = ?, episodes = ?, episodesWatched = ?, startDate = ?, completionDate = ?, rating = ?, genreIds = ?, updatedAt = ?
+                   SET title = ?, status = ?, episodes = ?, episodesWatched = ?, startDate = ?, completionDate = ?, rating = ?, genreIds = ?, seasons = ?, updatedAt = ?
                    WHERE id = ?`;
             values = [
                 data.title,
@@ -101,6 +102,7 @@ export const POST: RequestHandler = async ({ request }) => {
                 completionDate,
                 data.rating,
                 data.genreIds,
+                data.seasons || 0,
                 new Date().toISOString().replace('T', ' ').replace('Z', ''),
                 data.id,
             ];

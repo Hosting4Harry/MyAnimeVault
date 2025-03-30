@@ -34,6 +34,9 @@
                         >
                             {anime.status.replaceAll("_", " ")}
                         </span>
+                       <span class="text-sm text-gray-500">
+                        ({anime.seasons || 1} {anime.seasons <= 1 ? "Season" : "Seasons"})
+                       </span>
                     </div>
                     <div
                         class="flex items-center space-x-2 text-sm text-gray-500 mt-1"

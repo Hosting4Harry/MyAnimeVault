@@ -22,6 +22,7 @@
     let anime = $state<Anime>({
         id: 0,
         title: "",
+        seasons: 0,
         episodes: 0,
         episodesWatched: 0,
         genreIds: "",
@@ -35,7 +36,7 @@
     let uniqueGenres = $derived.by<Option[]>(() => {
         return page?.data?.genres || [];
     });
-
+    let isLoading = $state(false);
     let selectedStatus = $state<Option[]>([
         { label: "Plan to Watch", value: "plan_to_watch" },
     ]);
@@ -45,8 +46,9 @@
     async function addAnime(e: Event): Promise<void> {
         e.preventDefault();
         if (!validateForm(formElement as HTMLFormElement)) return;
-
+        isLoading = true;
         try {
+
             const response = await fetch("/api/anime-list", {
                 method: "POST",
                 headers: {
@@ -72,6 +74,8 @@
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            isLoading = false;
         }
     }
 
@@ -79,6 +83,7 @@
         anime = {
             id: 0,
             title: "",
+            seasons: 0,
             episodes: 0,
             episodesWatched: 0,
             genreIds: "",
@@ -124,7 +129,7 @@
 
 {#if isDialogOpen}
     <div
-        class="fixed inset-0 bg-black/50 flex items-center justify-center"
+        class="fixed inset-0 bg-black/50 text-black flex items-center justify-center"
     >
         <form
             bind:this={formElement}
@@ -194,6 +199,20 @@
                 </div>
                 <div>
                     <label
+                        for="seasons"
+                        class="block text-sm mb-1 font-medium text-gray-700"
+                        >Total Seasons:</label
+                    >
+                    <InputField
+                        id="seasons"
+                        numberOnly
+                        placeholder="Season"
+                        bind:value={anime.seasons}
+                        class="w-full !p-2.5 border rounded"
+                    />
+                </div>
+                <div>
+                    <label
                         for="episodes"
                         class="block text-sm mb-1 font-medium text-gray-700"
                         >Total Episode:</label
@@ -220,28 +239,32 @@
                         class="w-full !p-2.5 border rounded"
                     />
                 </div>
-                <div class="col-span-2 flex items-center justify-start gap-2">
+                <div >
                     <label
                         for="ratings"
                         class="block text-sm mb-1 font-medium text-gray-700"
                         >Ratings:</label
                     >
+                   <div class="flex items-center justify-start gap-2 p-2">
                     <StarRating bind:rating={anime.rating} />
+                   </div>
                 </div>
             </div>
             <div class="flex gap-2 mt-4">
                 <button
                     type="submit"
-                    class="flex-1 bg-neutral-800 hover:bg-neutral-950 text-white px-4 py-2 rounded"
+                    disabled={isLoading}
+                    class="flex-1 bg-neutral-800 hover:bg-neutral-950 text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isEditing ? "Update" : "Add"}
                 </button>
                 <button
+                    disabled={isLoading}
                     onclick={() => {
                         resetForm();
                         isDialogOpen = false;
                     }}
-                    class="flex-1 border border-neutral-800 hover:border-neutral-950 bg-white text-neutral-950 px-4 py-2 rounded"
+                    class="flex-1 border border-neutral-800 hover:border-neutral-950 bg-white text-neutral-950 px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Cancel
                 </button>

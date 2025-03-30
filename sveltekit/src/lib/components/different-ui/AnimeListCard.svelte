@@ -3,8 +3,7 @@
     import { convertDate } from "$lib/utils/date-utils";
     import { Loader, Pencil, Trash2 } from "lucide-svelte";
 
-    let { animeList, openEditModal, deleteAnime }: ComponentProps =
-        $props();
+    let { animeList, openEditModal, deleteAnime }: ComponentProps = $props();
 
     function getStatusColor(status: string) {
         const colors = {
@@ -25,22 +24,30 @@
     {:else}
         {#each animeList as anime (anime.id)}
             <div
-                class="rounded-lg shadow-3xl p-4 hover:shadow-md transition col-span-1 min-w-[348px] sm:min-w-[250px] md:min-w-[348px] flex flex-col h-full bg-gray-800 text-[#f3f4f6]"
+                class="rounded-lg shadow-3xl p-4 hover:shadow-md transition flex flex-col h-full bg-gray-800 text-[#f3f4f6]"
             >
                 <div class="flex justify-between items-start mb-3">
-                    <div>
-                        <h3 class="text-lg font-medium">{anime.title}</h3>
-                        <p class="text-sm text-gray-500">
-                            Rating: {anime?.rating || "N/A"}
-                        </p>
-                    </div>
+                    <h3
+                        class="text-lg font-medium text-white whitespace-normal"
+                    >
+                        {anime.title}
+                    </h3>
+
                     <span
                         class={`px-2 py-1 text-xs rounded-full capitalize ${getStatusColor(anime.status)}`}
                     >
                         {anime.status.replaceAll("_", " ")}
                     </span>
                 </div>
-
+                <div class="flex items-center justify-between gap-2  mb-3">
+                    <p class="text-sm text-gray-500">
+                        Rating: {anime?.rating || "N/A"}
+                    </p>
+                    <span class="text-sm text-gray-500">
+                        ({anime.seasons || 1}
+                        {anime.seasons <= 1 ? "Season" : "Seasons"})
+                    </span>
+                </div>
                 <div class="flex-grow"></div>
                 <!-- Pushes the rest to the bottom -->
 
