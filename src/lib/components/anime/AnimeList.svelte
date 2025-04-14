@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { page } from "$app/state";
     import { addToast } from "$lib/store/toast-store";
     import type { Anime } from "$lib/types/anime.types";
     import DynamicComponent from "../building-blocks/DynamicComponent.svelte";

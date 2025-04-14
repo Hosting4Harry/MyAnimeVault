@@ -12,18 +12,17 @@ export const formatPhoneNumberAsYouType = (input: string, type = "(000) 000-0000
         } else {
             input = `${input.slice(0, 3)}-${input.slice(3, 6)}-${input.slice(6, 10)}`;
         }
+    } else if (input.length === 0) {
+        input = ''; // Handle clear state
+    } else if (input.length <= 3) {
+        input = `(${input}`;
+    } else if (input.length <= 6) {
+        input = `(${input.slice(0, 3)}) ${input.slice(3)}`;
     } else {
-        if (input.length === 0) {
-            input = ''; // Handle clear state
-        } else if (input.length <= 3) {
-            input = `(${input}`;
-        } else if (input.length <= 6) {
-            input = `(${input.slice(0, 3)}) ${input.slice(3)}`;
-        } else {
-            input = `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6, 10)}`;
-        }
+        input = `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6, 10)}`;
     }
-    return input;
+
+return input;
 };
 
 export function numericFormatter(input: string | number, pattern: string): string {
